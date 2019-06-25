@@ -25,7 +25,7 @@ namespace Todo.Droid
             base.OnCreate();
             AndroidShinyHost.Init(
                 this,
-                new SampleStartup()
+                new ShinyStartup()
             );
         }
     }

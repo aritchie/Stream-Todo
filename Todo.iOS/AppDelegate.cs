@@ -20,5 +20,12 @@ namespace Todo.iOS
 
             return base.FinishedLaunching(app, options);
         }
+
+
+        [Export("application:performFetchWithCompletionHandler:")]
+        public void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
+        {
+            Shiny.Jobs.JobManager.OnBackgroundFetch(completionHandler);
+        }
     }
 }

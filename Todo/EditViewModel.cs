@@ -40,30 +40,36 @@ namespace Todo
                     };
                     await conn.InsertAsync(todo);
 
-                    var access = await notifications.RequestAccess();
-                    if (access == Shiny.AccessState.Available)
+                    if (this.RemindOnDay)
                     {
-                        await notifications.Send(new Notification
+                        var access = await notifications.RequestAccess();
+                        if (access == Shiny.AccessState.Available)
                         {
-                            Title = this.ReminderTitle,
-                            Message = this.Notes,
-                            ScheduleDate = this.AlarmDate
-                        });
+                            await notifications.Send(new Notification
+                            {
+                                Title = this.ReminderTitle,
+                                Message = this.Notes,
+                                ScheduleDate = this.AlarmDate
+                            });
+                        }
                     }
 
-                    access = await geofences.RequestAccess();
-                    if (access == Shiny.AccessState.Available)
+                    if (this.RemindOnLocation)
                     {
-                        await geofences.StartMonitoring(new GeofenceRegion(
-                            todo.Id.ToString(),
-                            new Position(1, 1),
-                            Distance.FromMeters(200)
-                        )
+                        var access = await geofences.RequestAccess();
+                        if (access == Shiny.AccessState.Available)
                         {
-                            NotifyOnEntry = true,
-                            NotifyOnExit = false
-                            //SingleUse = true
-                        });
+                            await geofences.StartMonitoring(new GeofenceRegion(
+                                todo.Id.ToString(),
+                                new Position(1, 1),
+                                Distance.FromMeters(200)
+                            )
+                            {
+                                NotifyOnEntry = true,
+                                NotifyOnExit = false
+                                //SingleUse = true
+                            });
+                        }
                     }
                     //if (access == Shiny.AccessState.Denied)
                     //{
@@ -72,17 +78,7 @@ namespace Todo
                 },
                 this.WhenAny(
                     x => x.ReminderTitle,
-                    x => x.AlarmDate,
-                    (title, alarm) =>
-                    {
-                        if (String.IsNullOrWhiteSpace(title.GetValue()))
-                            return false;
-
-                        if (alarm.GetValue() < DateTime.Now)
-                            return false;
-
-                        return true;
-                    }
+                    x => String.IsNullOrWhiteSpace(x.GetValue())
                 )
             );
             this.BindBusy(this.Save);

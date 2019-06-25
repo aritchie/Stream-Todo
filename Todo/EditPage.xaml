@@ -20,8 +20,11 @@
                 <ai:CheckboxCell Title="Remind me on a day" 
                                  Checked="{Binding RemindOnDay}" />
                 
-                <ai:DatePickerCell Date="{Binding Date}" />
-                <ai:DatePickerCell Date="{Binding Time}" />
+                <ai:DatePickerCell Date="{Binding Date}" 
+                                   IsEnabled="{Binding RemindOnDay}" />
+                
+                <ai:DatePickerCell Date="{Binding Time}"
+                                   IsEnabled="{Binding RemindOnDay}" />
             </ai:Section>
             
             <ai:Section Title="Location">
@@ -30,7 +33,8 @@
                                  
                 <ai:CommandCell Title="Pick Location" 
                                 ValueText="{Binding Location}"
-                                Command="{Binding SetLocation}" />
+                                Command="{Binding SetLocation}" 
+                                IsEnabled="{Binding RemindOnLocation}" />
             </ai:Section>
             
             <ai:Section>
