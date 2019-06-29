@@ -25,9 +25,6 @@ namespace Todo.Infrastructure
             var todo = await this.conn.GetAsync<TodoItem>(todoId);
 
             await this.notifications.Send(todo.Title, todo.Notes);
-
-            todo.CompletionDate = DateTime.Now;
-            await this.conn.UpdateAsync(todo);
         }
     }
 }

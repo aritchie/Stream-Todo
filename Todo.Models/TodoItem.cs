@@ -1,10 +1,14 @@
 ﻿using System;
-using SQLite;
 
-namespace Todo.Models
+#if MOBILE
+namespace Todo.Data
+#else
+namespace Todo.Functions.Data
+#endif
 {
     public class TodoItem
     {
+#if MOBILE
         public TodoItem()
         {
             this.Id = Guid.NewGuid();
@@ -12,6 +16,7 @@ namespace Todo.Models
 
 
         [PrimaryKey]
+#endif
         public Guid Id { get; set; }
 
         public string Title { get; set; }
@@ -20,7 +25,8 @@ namespace Todo.Models
         public double? GpsLatitude { get; set; }
         public double? GpsLongitude { get; set; }
 
-        public DateTime? DueDate { get; set; }
-        public DateTime? CompletionDate { get; set; }
+        public DateTime? DueDateUtc { get; set; }
+        public DateTime? CompletionDateUtc { get; set; }
+        public DateTime DateUpdatedUtc { get; set; }
     }
 }

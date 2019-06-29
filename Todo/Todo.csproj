@@ -17,10 +17,7 @@
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1347-pre" />
     <PackageReference Include="AiForms.SettingsView" Version="0.5.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
-    <PackageReference Include="Shiny.Notifications" Version="1.0.0.247-beta" />
-    <PackageReference Include="Shiny.Locations" Version="1.0.0.247-beta" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Shiny.Notifications" Version="1.0.0.250-beta" />
+    <PackageReference Include="Shiny.Locations" Version="1.0.0.250-beta" />
   </ItemGroup>
 </Project>
