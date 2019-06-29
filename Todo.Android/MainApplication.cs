@@ -2,7 +2,6 @@
 using Shiny;
 using Android.App;
 using Android.Runtime;
-using Todo.Infrastructure;
 
 
 namespace Todo.Droid

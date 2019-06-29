@@ -6,12 +6,17 @@ using Shiny.Jobs;
 using Shiny.Notifications;
 using Shiny.Locations;
 using Shiny.Logging;
+using Shiny.Prism;
+using Prism.DryIoc;
 
 
 namespace Todo
 {
-    public class ShinyStartup : Startup
+    public class ShinyStartup : PrismStartup
     {
+        //public ShinyStartup() : base(new DryIocContainerExtension()) { }
+
+
         public override void ConfigureServices(IServiceCollection services)
         {
             services.UseNotifications();

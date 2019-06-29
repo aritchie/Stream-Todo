@@ -4,7 +4,6 @@
                         xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                         xmlns:prism="http://prismlibrary.com"
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                        xmlns:styles="clr-namespace:Todo.Styles"
                         mc:Ignorable="d"
                         x:Class="Todo.App">
 </prism:PrismApplication>
