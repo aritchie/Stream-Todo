@@ -30,6 +30,7 @@ namespace Todo.Functions.Data
         public double? GpsLatitude { get; set; }
         public double? GpsLongitude { get; set; }
 
+        public bool IsDeleted { get; set; }
         public DateTime? DueDateUtc { get; set; }
         public DateTime? CompletionDateUtc { get; set; }
         public DateTime DateUpdatedUtc { get; set; }
