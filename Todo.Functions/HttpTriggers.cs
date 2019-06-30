@@ -1,15 +1,14 @@
 using System;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Todo.Functions.Data;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Todo.Functions.Data;
+
 
 namespace Todo.Functions
 {
@@ -29,7 +28,24 @@ namespace Todo.Functions
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            var item = await req.ReadAs<TodoItem>();
+            // TODO: incoming soft delete - have to trigger delete back to client
+            var remote = await req.ReadAs<TodoItem>();
+            var local = await this.data.Items.FindAsync(remote.Id);
+            if (local == null)
+            {
+                // new item
+                this.data.Items.Add(remote);
+                await this.data.SaveChangesAsync();
+            }
+            else if (local.DateUpdatedUtc > remote.DateUpdatedUtc)
+            {
+                // merge conflict
+            }
+            else
+            {
+                // update local
+                await this.data.SaveChangesAsync();
+            }
 
             return new OkObjectResult("");
         }
@@ -40,7 +56,10 @@ namespace Todo.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            var query = this.data.Items.AsQueryable();
+            var query = this.data
+                .Items
+                .AsQueryable();
+
             var includeCompleted = req.Query["IncludeCompleted"] == "true";
             if (!includeCompleted)
                 query = query.Where(x => x.CompletionDateUtc == null);
