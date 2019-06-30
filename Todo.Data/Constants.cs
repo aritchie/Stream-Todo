@@ -5,6 +5,6 @@ namespace Todo.Data
 {
     static class Constants
     {
-        public const string BaseApiUri = "";
+        public const string BaseApiUri = "https://google.com";
     }
 }

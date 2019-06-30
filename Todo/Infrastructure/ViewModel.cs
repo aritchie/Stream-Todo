@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Prism.Navigation;
 using ReactiveUI;
@@ -7,13 +8,28 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Todo
 {
-    public abstract class ViewModel : ReactiveObject, 
+    public abstract class ViewModel : ReactiveObject,
                                       INavigatedAware,
                                       IInitializeAsync,
                                       IDestructible
     {
         [Reactive] public bool IsBusy { get; protected set; }
         [Reactive] public string Title { get; protected set; }
+
+
+        protected CompositeDisposable DestroyWith { get; } = new CompositeDisposable();
+
+        CompositeDisposable deactivateWith;
+        protected CompositeDisposable DeactivateWith
+        {
+            get
+            {
+                if (this.deactivateWith == null)
+                    this.deactivateWith = new CompositeDisposable();
+
+                return this.deactivateWith;
+            }
+        }
 
 
         protected void BindBusy(IReactiveCommand command) =>
@@ -26,6 +42,7 @@ namespace Todo
 
         public virtual void Destroy()
         {
+            this.DestroyWith?.Dispose();
         }
 
 
@@ -35,6 +52,8 @@ namespace Todo
 
         public virtual void OnNavigatedFrom(INavigationParameters parameters)
         {
+            this.deactivateWith?.Dispose();
+            this.deactivateWith = null;
         }
 
 

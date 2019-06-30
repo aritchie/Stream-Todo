@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shiny.Prism" Version="1.0.0.511-pre" />
+    <PackageReference Include="LiveXAML" Version="2.1.72" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.540366" />
     <PackageReference Include="ReactiveUI.Fody" Version="9.18.1" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1347-pre" />

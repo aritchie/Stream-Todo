@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Windows.Input;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Shiny.Net;
+
 
 namespace Todo
 {
@@ -17,7 +19,10 @@ namespace Todo
         {
             connectivity
                 .WhenInternetStatusChanged()
-                .ToPropertyEx(this, x => x.IsNetworkAvailable);
+                .ToPropertyEx(this, x => x.IsNetworkAvailable)
+                .DisposeWith(this.DestroyWith);
+
+            this.Add = navigator.NavigateCommand("EditPage");
 
             this.Load = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -40,8 +45,10 @@ namespace Todo
                             // TODO: cancel notification & geofence if completed
                             //item.MarkDirty();
                         });
-                        // TODO: pass item
-                        vm.Edit = navigator.NavigateCommand("EditPage");
+                        vm.Edit = navigator.NavigateCommand<TodoItemViewModel>(
+                            "EditPage",
+                            (ivm, p) => p.Add("", ivm)
+                        );
 
                         return vm;
                     })
@@ -51,6 +58,7 @@ namespace Todo
         }
 
 
+        public ICommand Add { get; }
         public IReactiveCommand Load { get; }
         public bool IsNetworkAvailable { [ObservableAsProperty] get; }
         [Reactive] public IList<TodoItemViewModel> List { get; private set; }

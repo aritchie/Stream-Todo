@@ -4,6 +4,10 @@
              x:Class="Todo.MainPage"
              NavigationPage.HasNavigationBar="False">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding Add}" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <ListView ItemsSource="{Binding Items}"
                   RefreshCommand="{Binding Load}"

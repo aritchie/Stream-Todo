@@ -17,6 +17,7 @@ namespace Todo.iOS
             iOSShinyHost.Init(new ShinyStartup());
             Forms.Init();
             this.LoadApplication(new App());
+            AiForms.Renderers.iOS.SettingsViewInit.Init();
 
             return base.FinishedLaunching(app, options);
         }

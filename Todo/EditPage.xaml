@@ -1,42 +1,42 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ai="clr-namespace:AiForms.Renderers;assembly=SettingsView"
              x:Class="Todo.EditPage"
              Title="{Binding Title}">
-    
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Command="{Binding Save}" />
     </ContentPage.ToolbarItems>
-    
+
     <ContentPage.Content>
         <ai:SettingsView>
             <ai:Section>
-                <ai:EntryCell Placeholder="Title" 
+                <ai:EntryCell Placeholder="Title"
                               ValueText="{Binding ReminderTitle}" />
             </ai:Section>
-            
+
             <ai:Section Title="Alarm">
-                <ai:CheckboxCell Title="Remind me on a day" 
+                <ai:CheckboxCell Title="Remind me on a day"
                                  Checked="{Binding RemindOnDay}" />
-                
-                <ai:DatePickerCell Date="{Binding Date}" 
+
+                <ai:DatePickerCell Date="{Binding Date}"
                                    IsEnabled="{Binding RemindOnDay}" />
-                
+
                 <ai:DatePickerCell Date="{Binding Time}"
                                    IsEnabled="{Binding RemindOnDay}" />
             </ai:Section>
-            
+
             <ai:Section Title="Location">
                 <ai:CheckboxCell Title="Remind me at a location"
                                  Checked="{Binding RemindOnLocation}" />
-                                 
-                <ai:CommandCell Title="Pick Location" 
+
+                <ai:CommandCell Title="Pick Location"
                                 ValueText="{Binding Location}"
-                                Command="{Binding SetLocation}" 
+                                Command="{Binding SetLocation}"
                                 IsEnabled="{Binding RemindOnLocation}" />
             </ai:Section>
-            
+
             <ai:Section>
                 <ai:EntryCell Placeholder="Notes"
                               ValueText="{Binding Notes}" />
