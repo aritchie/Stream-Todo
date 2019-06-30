@@ -11,22 +11,17 @@ namespace Todo
 {
     public class MainViewModel : ViewModel
     {
-        readonly TodoSqliteConnection conn;
-
-
-        public MainViewModel(TodoSqliteConnection conn, 
+        public MainViewModel(IDataService dataService,
                              IConnectivity connectivity,
                              INavigationService navigator)
         {
-            this.conn = conn;
-
             connectivity
                 .WhenInternetStatusChanged()
                 .ToPropertyEx(this, x => x.IsNetworkAvailable);
 
             this.Load = ReactiveCommand.CreateFromTask(async () =>
             {
-                var todos = await conn.Todos.ToListAsync();
+                var todos = await dataService.GetAll(false);
 
                 this.List = todos
                     .Select(item =>
@@ -34,12 +29,12 @@ namespace Todo
                         var vm = new TodoItemViewModel(item);
                         vm.MarkComplete = ReactiveCommand.CreateFromTask(async () =>
                         {
-                            if (item.CompletionDate == null)
-                                item.CompletionDate = DateTime.Now;
+                            if (item.CompletionDateUtc == null)
+                                item.CompletionDateUtc = DateTime.UtcNow;
                             else
-                                item.CompletionDate = null;
+                                item.CompletionDateUtc = null;
 
-                            await conn.UpdateAsync(item);
+                            await dataService.Update(item);
 
                             // TODO: for unit testing later
                             // TODO: cancel notification & geofence if completed

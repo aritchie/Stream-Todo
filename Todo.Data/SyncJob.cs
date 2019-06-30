@@ -4,16 +4,18 @@ using System.Threading.Tasks;
 using Shiny.Jobs;
 
 
-namespace Todo.Infrastructure
+namespace Todo.Data
 {
     public class SyncJob : IJob
     {
-        readonly TodoSqliteConnection conn;
+        readonly IDataService data;
+        readonly IApiClient apiClient;
 
 
-        public SyncJob(TodoSqliteConnection conn)
+        public SyncJob(IApiClient apiClient, IDataService data)
         {
-            this.conn = conn;
+            this.apiClient = apiClient;
+            this.data = data;
         }
 
 

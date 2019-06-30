@@ -18,4 +18,5 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <Import Project="..\Todo.Models\Todo.Models.projitems" Label="Shared" />
 </Project>

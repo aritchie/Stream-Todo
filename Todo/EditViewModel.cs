@@ -5,14 +5,15 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Shiny.Locations;
 using Shiny.Notifications;
-using Todo.Models;
+
 
 namespace Todo
 {
     public class EditViewModel : ViewModel
     {
-        public EditViewModel(TodoSqliteConnection conn, 
-                             INotificationManager notifications, 
+        public EditViewModel(INavigationService navigator,
+                             IDataService data,
+                             INotificationManager notifications,
                              IGeofenceManager geofences)
         {
             this.WhenAnyValue(
@@ -32,13 +33,12 @@ namespace Todo
             this.Save = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
-                    var todo = new TodoItem
+                    var todo = await data.Create(newItem =>
                     {
-                        Title = this.ReminderTitle,
-                        Notes = this.Notes,
-                        DueDate = this.AlarmDate
-                    };
-                    await conn.InsertAsync(todo);
+                        newItem.Title = this.ReminderTitle;
+                        newItem.Notes = this.Notes;
+                        newItem.DueDateUtc = this.AlarmDate;
+                    });
 
                     if (this.RemindOnDay)
                     {

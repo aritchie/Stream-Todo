@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Windows.Input;
 using ReactiveUI;
-using Todo.Models;
 
 
 namespace Todo
 {
     public class TodoItemViewModel : ReactiveObject
     {
-        public TodoItemViewModel(TodoItem todo)
-        { 
+        public TodoItemViewModel(ITodoItem todo)
+        {
             this.Item = todo;
         }
 
@@ -24,15 +23,15 @@ namespace Todo
         public ICommand Edit { get; set; }
         public ICommand Delete { get; set; }
         public ICommand MarkComplete { get; set; }
-        public TodoItem Item { get; }
+        public ITodoItem Item { get; }
 
         public string Title => this.Item.Title;
-        public DateTime? DueDate => this.Item.DueDate;
+        public DateTime? DueDate => this.Item.DueDateUtc?.ToLocalTime();
 
-        public bool IsCompleted => this.Item.CompletionDate != null;
-        public bool HasDueDate => this.Item.DueDate != null;
-        public bool IsOverdue => this.Item.DueDate != null && 
-                                 this.Item.CompletionDate == null &&
-                                 this.Item.DueDate > DateTime.Now;
+        public bool IsCompleted => this.Item.CompletionDateUtc != null;
+        public bool HasDueDate => this.Item.DueDateUtc != null;
+        public bool IsOverdue => this.Item.DueDateUtc != null &&
+                                 this.Item.CompletionDateUtc == null &&
+                                 this.Item.DueDateUtc > DateTime.Now;
     }
 }

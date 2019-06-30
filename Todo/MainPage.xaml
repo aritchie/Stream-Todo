@@ -12,19 +12,27 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Label Text="{Binding ReminderTitle}" />
-                        <Label Text="{Binding DueDate}"
-                               TextColor="Black"
-                               IsVisible="{Binding HasDueDate}">
-                            <Label.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="true">
-                                    <Setter Property="TextColor" Value="Red" />
-                                </DataTrigger>
-                                <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="false">
-                                    <Setter Property="TextColor" Value="Black" />
-                                </DataTrigger>
-                            </Label.Triggers>
-                        </Label>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete" Command="{Binding Delete}" />
+                        </ViewCell.ContextActions>
+
+                        <ViewCell.View>
+                            <StackLayout>
+                                <Label Text="{Binding ReminderTitle}" />
+                                <Label Text="{Binding DueDate}"
+                                       TextColor="Black"
+                                       IsVisible="{Binding HasDueDate}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="true">
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="false">
+                                            <Setter Property="TextColor" Value="Black" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+                        </ViewCell.View>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

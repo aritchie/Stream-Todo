@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Todo.Infrastructure;
 using Shiny;
-using Shiny.Jobs;
 using Shiny.Notifications;
 using Shiny.Locations;
 using Shiny.Logging;
 using Shiny.Prism;
 using Prism.DryIoc;
+using Todo.Data;
+using Todo.Infrastructure;
 
 
 namespace Todo
@@ -19,18 +19,10 @@ namespace Todo
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.UseNotifications();
+            services.UseNotifications(true);
             services.UseGeofencing<GeofenceDelegate>();
             services.RegisterStartupTask<GlobalExceptionHandler>();
-
-            var job = new JobInfo
-            {
-                Identifier = nameof(SyncJob),
-                Type = typeof(SyncJob),
-                BatteryNotLow = true,
-                RequiredInternetAccess = InternetAccess.Any
-            };
-            services.RegisterJob(job);
+            services.RegisterModule<DataModule>();
 
             Log.UseConsole();
             Log.UseDebug();

@@ -6,18 +6,23 @@ namespace Todo.Data
 namespace Todo.Functions.Data
 #endif
 {
-    public class TodoItem
-    {
+
 #if MOBILE
+    public class TodoItem : ITodoItem
+    {
         public TodoItem()
         {
             this.Id = Guid.NewGuid();
         }
 
 
-        [PrimaryKey]
-#endif
+        [SQLite.PrimaryKey]
         public Guid Id { get; set; }
+#else
+    public class TodoItem
+    {
+        public Guid Id { get; set; }
+#endif
 
         public string Title { get; set; }
         public string Notes { get; set; }

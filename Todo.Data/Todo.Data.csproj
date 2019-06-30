@@ -1,15 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <DefineConstants>MOBILE</DefineConstants>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Refit" Version="4.7.9" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
+    </ItemGroup>
+
+    <Import Project="..\Todo.Models\Todo.Models.projitems" Label="Shared" />
 
 </Project>

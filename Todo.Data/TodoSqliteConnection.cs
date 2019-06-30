@@ -4,17 +4,17 @@ using Shiny.IO;
 using SQLite;
 
 
-namespace Todo
+namespace Todo.Data
 {
     public class TodoSqliteConnection : SQLiteAsyncConnection
     {
         public TodoSqliteConnection(IFileSystem fileSystem)
             : base(Path.Combine(fileSystem.AppData.FullName, "todo.db"))
         {
-            //this.GetConnection().CreateTable<TodoItem>();
+            this.GetConnection().CreateTable<TodoItem>();
         }
 
 
-        //public AsyncTableQuery<TodoItem> Todos => this.Table<TodoItem>();
+        public AsyncTableQuery<TodoItem> Todos => this.Table<TodoItem>();
     }
 }

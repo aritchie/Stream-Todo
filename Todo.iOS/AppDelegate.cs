@@ -22,10 +22,7 @@ namespace Todo.iOS
         }
 
 
-        [Export("application:performFetchWithCompletionHandler:")]
-        public void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
-        {
-            Shiny.Jobs.JobManager.OnBackgroundFetch(completionHandler);
-        }
+        public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
+            => Shiny.Jobs.JobManager.OnBackgroundFetch(completionHandler);
     }
 }

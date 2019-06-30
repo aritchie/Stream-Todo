@@ -2,27 +2,27 @@
 using System.Threading.Tasks;
 using Shiny.Locations;
 using Shiny.Notifications;
-using Todo.Models;
+
 
 namespace Todo.Infrastructure
 {
     public class GeofenceDelegate : IGeofenceDelegate
     {
         readonly INotificationManager notifications;
-        readonly TodoSqliteConnection conn;
+        readonly IDataService data;
 
 
-        public GeofenceDelegate(INotificationManager notifications, TodoSqliteConnection conn)
+        public GeofenceDelegate(INotificationManager notifications, IDataService data)
         {
             this.notifications = notifications;
-            this.conn = conn;
+            this.data = data;
         }
 
 
         public async Task OnStatusChanged(GeofenceState newStatus, GeofenceRegion region)
         {
             var todoId = Guid.Parse(region.Identifier);
-            var todo = await this.conn.GetAsync<TodoItem>(todoId);
+            var todo = await this.data.GetById(todoId);
 
             await this.notifications.Send(todo.Title, todo.Notes);
         }
