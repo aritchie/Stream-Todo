@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Todo.Functions.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Todo.Functions
 {
@@ -27,9 +29,7 @@ namespace Todo.Functions
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-            //string name = req.Query["name"];
-            var item = await req.ReadAs<object>();
+            var item = await req.ReadAs<TodoItem>();
 
             return new OkObjectResult("");
         }
@@ -40,11 +40,16 @@ namespace Todo.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var query = this.data.Items.AsQueryable();
+            var includeCompleted = req.Query["IncludeCompleted"] == "true";
+            if (!includeCompleted)
+                query = query.Where(x => x.CompletionDateUtc == null);
 
-            //string name = req.Query["name"];
+            if (DateTime.TryParse(req.Query["Delta"], out var delta))
+                query = query.Where(x => x.DateUpdatedUtc > delta);
 
-            return new OkObjectResult("");
+            var list = await query.ToListAsync();
+            return new OkObjectResult(list);
         }
     }
 }
