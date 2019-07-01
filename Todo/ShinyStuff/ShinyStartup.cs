@@ -10,12 +10,8 @@ using Todo.Infrastructure;
 
 namespace Todo
 {
-    //public class ShinyStartup : PrismStartup
     public class ShinyStartup : Startup
     {
-        //public ShinyStartup() : base(new DryIocContainerExtension()) { }
-
-
         public override void ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IUserDialogs, UserDialogs>();
