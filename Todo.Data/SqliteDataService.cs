@@ -28,23 +28,32 @@ namespace Todo.Data
 
         public async Task Delete(Guid itemId)
         {
-            await this.conn.DeleteAsync(itemId);
+            var item = await this.conn.GetAsync<TodoItem>(itemId);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                await this.conn.UpdateAsync(item);
+            }
         }
+
 
         public async Task<IList<ITodoItem>> GetAll(bool includeCompleted)
         {
-            var results = await this.conn.Todos.ToListAsync();
+            var results = await this.conn
+                .Todos
+                .Where(x => !x.IsDeleted)
+                .ToListAsync();
+
             return results
                 .OfType<ITodoItem>()
                 .ToList();
         }
 
-        public async Task<ITodoItem> GetById(Guid itemId) => await this.conn.GetAsync<TodoItem>(itemId);
+        public async Task<ITodoItem> GetById(Guid itemId)
+            => await this.conn.GetAsync<TodoItem>(itemId);
 
 
         public Task Update(ITodoItem item)
-        {
-            throw new NotImplementedException();
-        }
+            => this.conn.UpdateAsync(item);
     }
 }
