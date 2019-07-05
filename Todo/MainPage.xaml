@@ -17,11 +17,20 @@
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="Delete" Command="{Binding Delete}" />
+                            <MenuItem Text="Edit"
+                                      Command="{Binding Edit}" />
+
+                            <MenuItem Text="Delete"
+                                      Command="{Binding Delete}"
+                                      IsDestructive="True" />
                         </ViewCell.ContextActions>
 
                         <ViewCell.View>
                             <StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding MarkComplete}" />
+                                </StackLayout.GestureRecognizers>
+
                                 <Label Text="{Binding ReminderTitle}" />
                                 <Label Text="{Binding DueDate}"
                                        TextColor="Black"
@@ -32,6 +41,23 @@
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="false">
                                             <Setter Property="TextColor" Value="Black" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
+                                            <Setter Property="TextDecorations" Value="Strikethrough" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
+                                            <Setter Property="TextDecorations" Value="None" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label Text="{Binding Location}"
+                                       IsVisible="{Binding HasLocation}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
+                                            <Setter Property="TextDecorations" Value="Strikethrough" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
+                                            <Setter Property="TextDecorations" Value="None" />
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>

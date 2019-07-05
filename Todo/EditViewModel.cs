@@ -93,10 +93,11 @@ namespace Todo
                     //{
                     //    await App.Current.MainPage.DisplayAlert("NO NOTIFICATIONS FOR YOU");
                     //}
+                    await navigator.GoBack();
                 },
                 this.WhenAny(
                     x => x.ReminderTitle,
-                    x => String.IsNullOrWhiteSpace(x.GetValue())
+                    x => !String.IsNullOrWhiteSpace(x.GetValue())
                 )
             );
             this.BindBusy(this.Save);

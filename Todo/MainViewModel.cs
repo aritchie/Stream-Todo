@@ -62,5 +62,12 @@ namespace Todo
         public IReactiveCommand Load { get; }
         public bool IsNetworkAvailable { [ObservableAsProperty] get; }
         [Reactive] public IList<TodoItemViewModel> List { get; private set; }
+
+
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+            ((ICommand)this.Load).Execute(null);
+        }
     }
 }
