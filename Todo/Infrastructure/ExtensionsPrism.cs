@@ -33,20 +33,25 @@ namespace Todo
 
 
         public static ICommand NavigateCommand<T>(this INavigationService navigation, string uri, Action<T, INavigationParameters> getParams = null, IObservable<bool> canExecute = null)
-               => ReactiveCommand.CreateFromTask<T>(async arg =>
-               {
-                   var p = new NavigationParameters();
-                   getParams?.Invoke(arg, p);
-                   await navigation.Navigate(uri, p);
-               }, canExecute);
+            => ReactiveCommand.CreateFromTask<T>(async arg =>
+            {
+                var p = new NavigationParameters();
+                getParams?.Invoke(arg, p);
+                await navigation.Navigate(uri, p);
+            }, canExecute);
 
 
 
-        public static async Task GoBack(this INavigationService navigation, bool toRoot = false, params (string, object)[] parameters)
+        public static Task GoBack(this INavigationService navigation, bool toRoot = false, params (string, object)[] parameters)
+            => navigation.GoBack(toRoot, parameters.ToNavParams());
+
+
+        public static async Task GoBack(this INavigationService navigation, bool toRoot = false, INavigationParameters parameters = null)
         {
+            parameters = parameters ?? new NavigationParameters();
             var task = toRoot
-                ? navigation.GoBackToRootAsync(parameters.ToNavParams())
-                : navigation.GoBackAsync(parameters.ToNavParams());
+                ? navigation.GoBackToRootAsync(parameters)
+                : navigation.GoBackAsync(parameters);
 
             var result = await task.ConfigureAwait(false);
             if (!result.Success)
@@ -54,12 +59,22 @@ namespace Todo
         }
 
 
-        public static ICommand GoBackCommand(this INavigationService navigation, IObservable<bool> canExecute, bool toRoot = false, Func<(string, object)[]> getParams = null)
-            => ReactiveCommand.CreateFromTask(() => navigation.GoBack(toRoot, getParams?.Invoke()), canExecute);
+        public static ICommand GoBackCommand(this INavigationService navigation, bool toRoot = false, Action<INavigationParameters> getParams = null, IObservable<bool> canExecute = null)
+            => ReactiveCommand.CreateFromTask(async () =>
+            {
+                var p = new NavigationParameters();
+                getParams?.Invoke(p);
+                await navigation.GoBack(toRoot, p);
+            }, canExecute);
 
 
-        public static ICommand GoBackCommand(this INavigationService navigation, bool toRoot = false, Func<(string, object)[]> getParams = null)
-            => ReactiveCommand.CreateFromTask(() => navigation.GoBack(toRoot, getParams?.Invoke()));
+        public static ICommand GoBackCommand<T>(this INavigationService navigation, bool toRoot = false, Action<T, INavigationParameters> getParams = null, IObservable<bool> canExecute = null)
+            => ReactiveCommand.CreateFromTask<T>(async arg =>
+            {
+                var p = new NavigationParameters();
+                getParams?.Invoke(arg, p);
+                await navigation.GoBack(toRoot, p);
+            }, canExecute);
 
 
         public static INavigationParameters Set(this INavigationParameters parameters, string key, object value)

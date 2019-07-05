@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:ai="clr-namespace:AiForms.Renderers;assembly=SettingsView"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Todo.LocationPage"
+             Title="Location">
+    <ContentPage.Content>
+        <ai:SettingsView>
+            <ai:Section>
+                <ai:EntryCell Placeholder="Latitude"
+                              TextAlignment="Start"
+                              Keyboard="Numeric"
+                              ValueText="{Binding Latitude}" />
+
+                <ai:EntryCell Placeholder="Longitude"
+                              TextAlignment="Start"
+                              Keyboard="Numeric"
+                              ValueText="{Binding Longitude}" />
+            </ai:Section>
+
+            <ai:Section>
+                <ai:CommandCell Title="Save Location"
+                                Command="{Binding PickLocation}" />
+            </ai:Section>
+        </ai:SettingsView>
+    </ContentPage.Content>
+</ContentPage>

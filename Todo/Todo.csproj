@@ -25,4 +25,10 @@
     <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
     <ProjectReference Include="..\Todo.Data\Todo.Data.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="LocationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

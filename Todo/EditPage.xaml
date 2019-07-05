@@ -13,6 +13,7 @@
         <ai:SettingsView>
             <ai:Section>
                 <ai:EntryCell Placeholder="Title"
+                              TextAlignment="Start"
                               ValueText="{Binding ReminderTitle}" />
             </ai:Section>
 
@@ -20,10 +21,12 @@
                 <ai:CheckboxCell Title="Remind me on a day"
                                  Checked="{Binding RemindOnDay}" />
 
-                <ai:DatePickerCell Date="{Binding Date}"
+                <ai:DatePickerCell Title="Date"
+                                   Date="{Binding Date}"
                                    IsEnabled="{Binding RemindOnDay}" />
 
-                <ai:DatePickerCell Date="{Binding Time}"
+                <ai:TimePickerCell Title="Time"
+                                   Time="{Binding Time}"
                                    IsEnabled="{Binding RemindOnDay}" />
             </ai:Section>
 
@@ -39,6 +42,7 @@
 
             <ai:Section>
                 <ai:EntryCell Placeholder="Notes"
+                              TextAlignment="Start"
                               ValueText="{Binding Notes}" />
             </ai:Section>
         </ai:SettingsView>

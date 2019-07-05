@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Prism.AppModel;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,6 +12,7 @@ namespace Todo
     public abstract class ViewModel : ReactiveObject,
                                       INavigatedAware,
                                       IInitializeAsync,
+                                      IAutoInitialize,
                                       IDestructible
     {
         [Reactive] public bool IsBusy { get; protected set; }

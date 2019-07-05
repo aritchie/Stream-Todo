@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -30,6 +31,24 @@ namespace Todo
             ))
             .ToPropertyEx(this, x => x.AlarmDate);
 
+            this.WhenAnyValue(
+                x => x.RemindOnLocation,
+                x => x.Latitude,
+                x => x.Longitude
+            )
+            .Select(x =>
+            {
+                if (!x.Item1)
+                    return String.Empty;
+
+                return $"({x.Item2} - {x.Item3})";
+            })
+            .ToPropertyEx(this, x => x.Location);
+
+            this.Date = DateTime.Now.AddDays(1);
+            this.Time = this.Date.TimeOfDay;
+
+            this.SetLocation = navigator.NavigateCommand("LocationPage");
             this.Save = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
@@ -67,7 +86,6 @@ namespace Todo
                             {
                                 NotifyOnEntry = true,
                                 NotifyOnExit = false
-                                //SingleUse = true
                             });
                         }
                     }
@@ -86,20 +104,28 @@ namespace Todo
 
 
         public IReactiveCommand Save { get; }
-        public IReactiveCommand SetLocation { get; }
+        public ICommand SetLocation { get; }
         public DateTime AlarmDate { [ObservableAsProperty] get; }
+        public string Location { [ObservableAsProperty] get; }
 
         [Reactive] public string ReminderTitle { get; set; }
         [Reactive] public bool RemindOnDay { get; set; }
         [Reactive] public string Notes { get; set; }
         [Reactive] public DateTime Date { get; set; }
         [Reactive] public TimeSpan Time { get; set; }
+        [Reactive] public double Latitude { get; set; }
+        [Reactive] public double Longitude { get; set; }
         [Reactive] public bool RemindOnLocation { get; set; }
 
-        //public override void OnNavigatedTo(INavigationParameters parameters)
-        //{
-        //    parameters.GetValue<Reminder>("");
-        //}
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            //parameters.GetValue<Reminder>("");
+            if (parameters.GetNavigationMode() == NavigationMode.Back)
+            {
+                this.Latitude = parameters.GetValue<double>(nameof(this.Latitude));
+                this.Longitude = parameters.GetValue<double>(nameof(this.Longitude));
+            }
+        }
     }
 }
 
