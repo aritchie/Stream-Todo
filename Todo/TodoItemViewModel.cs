@@ -1,44 +1,18 @@
 ﻿using System;
 using System.Windows.Input;
-using Prism.Navigation;
 using ReactiveUI;
 using Shiny;
+
 
 namespace Todo
 {
     public class TodoItemViewModel : ReactiveObject
     {
-        public TodoItemViewModel(ITodoItem item,
-                                 IDataService data,
-                                 INavigationService navigator)
-        {
-            this.Item = item;
+        public TodoItemViewModel(ITodoItem item) => this.Item = item;
 
-            this.Edit = navigator.NavigateCommand<TodoItemViewModel>(
-                "EditPage",
-                (ivm, p) => p.Add("Item", ivm.Item)
-            );
-            this.MarkComplete = ReactiveCommand.CreateFromTask(async () =>
-            {
-                if (item.CompletionDateUtc == null)
-                    item.CompletionDateUtc = DateTime.UtcNow;
-                else
-                    item.CompletionDateUtc = null;
-
-                await data.Update(item);
-
-                this.RaisePropertyChanged(nameof(this.IsCompleted));
-                this.RaisePropertyChanged(nameof(this.IsOverdue));
-
-                // TODO: for unit testing later
-                // TODO: cancel notification & geofence if completed
-            });
-        }
-
-
-        public ICommand Edit { get; }
-        public ICommand Delete { get; }
-        public ICommand MarkComplete { get; }
+        public ICommand Edit { get; set; }
+        public ICommand Delete { get; set; }
+        public ICommand MarkComplete { get; set; }
         public ITodoItem Item { get; }
 
         public string Title => this.Item.Title;

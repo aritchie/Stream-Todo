@@ -82,8 +82,8 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Text="{Binding ToggleText}"
-                    Command="{Binding ToggleCompleted}"
+            <Button Text="{Binding ToggleShowText}"
+                    Command="{Binding ToggleShowCompleted}"
                     Grid.Row="1" />
         </Grid>
     </ContentPage.Content>
