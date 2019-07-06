@@ -6,6 +6,7 @@ using Shiny.Locations;
 using Shiny.Logging;
 using Todo.Data;
 using Todo.Infrastructure;
+using Acr.UserDialogs.Forms;
 
 
 namespace Todo
@@ -14,15 +15,17 @@ namespace Todo
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IUserDialogs, UserDialogs>();
-
+            services.AddSingleton<IUserDialogs, UserDialogs>();
             services.UseNotifications(true);
             services.UseGeofencing<GeofenceDelegate>();
             services.RegisterStartupTask<GlobalExceptionHandler>();
             services.RegisterModule<DataModule>();
 
+            services.UseAppCenterLogging("#{AppCenterSecret}#");
+#if DEBUG
             Log.UseConsole();
             Log.UseDebug();
+#endif
         }
     }
 }

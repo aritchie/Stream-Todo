@@ -18,6 +18,7 @@ namespace Todo.iOS
             Forms.Init();
             this.LoadApplication(new App());
             AiForms.Renderers.iOS.SettingsViewInit.Init();
+            Rg.Plugins.Popup.Popup.Init();
 
             return base.FinishedLaunching(app, options);
         }

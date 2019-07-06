@@ -2,70 +2,89 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Todo.MainPage"
-             Title="SHINY TODO">
+             Title="SHINY TODO"
+             NavigationPage.BackButtonTitle="">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding Add}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Items}"
-                  RefreshCommand="{Binding Load}"
-                  IsRefreshing="{Binding IsBusy}"
-                  IsPullToRefreshEnabled="{Binding IsNetworkAvailable}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem Text="Edit"
-                                      Command="{Binding Edit}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                            <MenuItem Text="Delete"
-                                      Command="{Binding Delete}"
-                                      IsDestructive="True" />
-                        </ViewCell.ContextActions>
+            <ListView ItemsSource="{Binding List}"
+                      RefreshCommand="{Binding Load}"
+                      IsRefreshing="{Binding IsBusy}"
+                      IsPullToRefreshEnabled="{Binding IsNetworkAvailable}"
+                      RowHeight="100"
+                      Grid.Row="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Edit"
+                                          Command="{Binding Edit}" />
 
-                        <ViewCell.View>
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding MarkComplete}" />
-                                </StackLayout.GestureRecognizers>
+                                <MenuItem Text="Delete"
+                                          Command="{Binding Delete}"
+                                          IsDestructive="True" />
+                            </ViewCell.ContextActions>
 
-                                <Label Text="{Binding ReminderTitle}" />
-                                <Label Text="{Binding DueDate}"
-                                       TextColor="Black"
-                                       IsVisible="{Binding HasDueDate}">
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="true">
-                                            <Setter Property="TextColor" Value="Red" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="false">
-                                            <Setter Property="TextColor" Value="Black" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
-                                            <Setter Property="TextDecorations" Value="Strikethrough" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
-                                            <Setter Property="TextDecorations" Value="None" />
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
-                                <Label Text="{Binding Location}"
-                                       IsVisible="{Binding HasLocation}">
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
-                                            <Setter Property="TextDecorations" Value="Strikethrough" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
-                                            <Setter Property="TextDecorations" Value="None" />
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
-                            </StackLayout>
-                        </ViewCell.View>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding MarkComplete}" />
+                                    </StackLayout.GestureRecognizers>
+
+                                    <Label Text="{Binding Title}" />
+                                    <Label Text="{Binding Notes}"
+                                           IsVisible="{Binding HasNotes}"
+                                           LineBreakMode="TailTruncation"
+                                           FontSize="Micro" />
+
+                                    <Label Text="{Binding DueDate}"
+                                           TextColor="Black"
+                                           IsVisible="{Binding HasDueDate}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="true">
+                                                <Setter Property="TextColor" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="false">
+                                                <Setter Property="TextColor" Value="Black" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
+                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
+                                                <Setter Property="TextDecorations" Value="None" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label Text="{Binding Location}"
+                                           IsVisible="{Binding HasLocation}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="true">
+                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="false">
+                                                <Setter Property="TextDecorations" Value="None" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button Text="{Binding ToggleText}"
+                    Command="{Binding ToggleCompleted}"
+                    Grid.Row="1" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

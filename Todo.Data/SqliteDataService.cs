@@ -39,14 +39,19 @@ namespace Todo.Data
 
         public async Task<IList<ITodoItem>> GetAll(bool includeCompleted)
         {
-            var results = await this.conn
+            var query = this.conn
                 .Todos
-                .Where(x => !x.IsDeleted)
-                .ToListAsync();
+                .Where(x => !x.IsDeleted);
 
-            return results
+            if (!includeCompleted)
+                query = query.Where(x => x.CompletionDateUtc == null);
+
+            var results = await query.ToListAsync();
+            var list = results
                 .OfType<ITodoItem>()
                 .ToList();
+
+            return list;
         }
 
         public async Task<ITodoItem> GetById(Guid itemId)

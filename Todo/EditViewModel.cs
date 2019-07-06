@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Acr.UserDialogs.Forms;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Shiny;
 using Shiny.Locations;
 using Shiny.Notifications;
 
@@ -14,6 +16,7 @@ namespace Todo
     {
         public EditViewModel(INavigationService navigator,
                              IDataService data,
+                             IUserDialogs dialogs,
                              INotificationManager notifications,
                              IGeofenceManager geofences)
         {
@@ -30,6 +33,32 @@ namespace Todo
                 0
             ))
             .ToPropertyEx(this, x => x.AlarmDate);
+
+            this.WhenAnyValue(x => x.RemindOnDay)
+                .Skip(1)
+                .Where(x => x)
+                .SubscribeAsync(async () =>
+                {
+                    var access = await notifications.RequestAccess();
+                    if (access != AccessState.Available)
+                    {
+                        this.RemindOnDay = false;
+                        await dialogs.Alert("Permission denied for notifications");
+                    }
+                });
+
+            this.WhenAnyValue(x => x.RemindOnLocation)
+                .Skip(1)
+                .Where(x => x)
+                .SubscribeAsync(async () =>
+                {
+                    var access = await geofences.RequestAccess();
+                    if (access != AccessState.Available)
+                    {
+                        this.RemindOnDay = false;
+                        await dialogs.Alert("Permission denied for geofences");
+                    }
+                });
 
             this.WhenAnyValue(
                 x => x.RemindOnLocation,
@@ -52,58 +81,51 @@ namespace Todo
             this.Save = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
+                    // TODO: if existing, I may have to create geofences and notifications
+
+                    // if new
                     var todo = await data.Create(newItem =>
                     {
                         newItem.Title = this.ReminderTitle;
                         newItem.Notes = this.Notes;
-                        newItem.DueDateUtc = this.AlarmDate;
+                        if (this.RemindOnDay)
+                            newItem.DueDateUtc = this.AlarmDate;
                     });
 
                     if (this.RemindOnDay)
                     {
-                        var access = await notifications.RequestAccess();
-                        if (access == Shiny.AccessState.Available)
+                        await notifications.Send(new Notification
                         {
-                            await notifications.Send(new Notification
-                            {
-                                Title = this.ReminderTitle,
-                                Message = this.Notes,
-                                ScheduleDate = this.AlarmDate
-                            });
-                        }
+                            Title = this.ReminderTitle,
+                            Message = this.Notes ?? String.Empty,
+                            ScheduleDate = this.AlarmDate
+                        });
                     }
 
                     if (this.RemindOnLocation)
                     {
-                        var access = await geofences.RequestAccess();
-                        if (access == Shiny.AccessState.Available)
+                        await geofences.StartMonitoring(new GeofenceRegion(
+                            todo.Id.ToString(),
+                            new Position(1, 1),
+                            Distance.FromMeters(200)
+                        )
                         {
-                            await geofences.StartMonitoring(new GeofenceRegion(
-                                todo.Id.ToString(),
-                                new Position(1, 1),
-                                Distance.FromMeters(200)
-                            )
-                            {
-                                NotifyOnEntry = true,
-                                NotifyOnExit = false
-                            });
-                        }
+                            NotifyOnEntry = true,
+                            NotifyOnExit = false
+                        });
                     }
-                    //if (access == Shiny.AccessState.Denied)
-                    //{
-                    //    await App.Current.MainPage.DisplayAlert("NO NOTIFICATIONS FOR YOU");
-                    //}
                     await navigator.GoBack();
                 },
                 this.WhenAny(
                     x => x.ReminderTitle,
-                    x => !String.IsNullOrWhiteSpace(x.GetValue())
+                    x => !x.GetValue().IsEmpty()
                 )
             );
             this.BindBusy(this.Save);
         }
 
 
+        ITodoItem existingItem;
         public IReactiveCommand Save { get; }
         public ICommand SetLocation { get; }
         public DateTime AlarmDate { [ObservableAsProperty] get; }
@@ -118,13 +140,25 @@ namespace Todo
         [Reactive] public double Longitude { get; set; }
         [Reactive] public bool RemindOnLocation { get; set; }
 
+
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            //parameters.GetValue<Reminder>("");
-            if (parameters.GetNavigationMode() == NavigationMode.Back)
+            var navMode = parameters.GetNavigationMode();
+            switch (navMode)
             {
-                this.Latitude = parameters.GetValue<double>(nameof(this.Latitude));
-                this.Longitude = parameters.GetValue<double>(nameof(this.Longitude));
+                case NavigationMode.Back:
+                    if (!parameters.ContainsKey(nameof(this.Latitude)))
+                        return;
+
+                    this.Latitude = parameters.GetValue<double>(nameof(this.Latitude));
+                    this.Longitude = parameters.GetValue<double>(nameof(this.Longitude));
+                    break;
+
+                case NavigationMode.New:
+                    //if (parameters.ContainsKey("Item"))
+                    //    this.existingItem = parameters.GetValue<ITodoItem>("Item");
+                    this.Title = "New Todo";
+                    break;
             }
         }
     }

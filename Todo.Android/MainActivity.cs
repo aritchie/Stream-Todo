@@ -27,6 +27,7 @@ namespace Todo.Droid
             base.OnCreate(savedInstanceState);
             Forms.Init(this, savedInstanceState);
             AiForms.Renderers.Droid.SettingsViewInit.Init();
+            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
 
             this.LoadApplication(new App());
         }

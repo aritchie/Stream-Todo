@@ -1,16 +1,16 @@
 ﻿using System;
+using Acr.UserDialogs.Forms;
 using ReactiveUI;
 using Shiny;
-//using Shiny;
-//using Shiny.Logging;
+using Shiny.Logging;
 
 
 namespace Todo.Infrastructure
 {
     public class GlobalExceptionHandler : IObserver<Exception>, IStartupTask
     {
-        //readonly IUserDialogs dialogs;
-        //public GlobalExceptionHandler(IUserDialogs dialogs) => this.dialogs = dialogs;
+        readonly IUserDialogs dialogs;
+        public GlobalExceptionHandler(IUserDialogs dialogs) => this.dialogs = dialogs;
 
 
         public void Start() => RxApp.DefaultExceptionHandler = this;
@@ -20,8 +20,8 @@ namespace Todo.Infrastructure
 
         public void OnNext(Exception value)
         {
-            //Log.Write(value);
-            //this.dialogs.Alert(value.ToSting(), "ERROR");
+            Log.Write(value);
+            this.dialogs.Alert(value.ToString(), "ERROR");
         }
     }
 }

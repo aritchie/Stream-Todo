@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using Prism.Navigation;
 using ReactiveUI;
@@ -23,44 +24,31 @@ namespace Todo
                 .DisposeWith(this.DestroyWith);
 
             this.Add = navigator.NavigateCommand("EditPage");
+            this.ToggleComplete = ReactiveCommand.Create(() => this.ShowCompleted = !this.ShowCompleted);
 
             this.Load = ReactiveCommand.CreateFromTask(async () =>
             {
-                var todos = await dataService.GetAll(false);
-
+                var todos = await dataService.GetAll(this.ShowCompleted);
                 this.List = todos
-                    .Select(item =>
-                    {
-                        var vm = new TodoItemViewModel(item);
-                        vm.MarkComplete = ReactiveCommand.CreateFromTask(async () =>
-                        {
-                            if (item.CompletionDateUtc == null)
-                                item.CompletionDateUtc = DateTime.UtcNow;
-                            else
-                                item.CompletionDateUtc = null;
-
-                            await dataService.Update(item);
-
-                            // TODO: for unit testing later
-                            // TODO: cancel notification & geofence if completed
-                            //item.MarkDirty();
-                        });
-                        vm.Edit = navigator.NavigateCommand<TodoItemViewModel>(
-                            "EditPage",
-                            (ivm, p) => p.Add("", ivm)
-                        );
-
-                        return vm;
-                    })
+                    .Select(item => new TodoItemViewModel(item, dataService, navigator))
                     .ToList();
             });
+            this.WhenAnyValue(x => x.ShowCompleted)
+                .Skip(1)
+                .Subscribe(_ => ((ICommand)this.Load).Execute(null));
 
+            this.WhenAnyValue(x => x.ShowCompleted)
+                .Select(x => x ? "Hide Completed" : "Show Completed")
+                .ToPropertyEx(this, x => x.ToggleText);
         }
 
 
         public ICommand Add { get; }
+        public ICommand ToggleComplete { get; }
         public IReactiveCommand Load { get; }
         public bool IsNetworkAvailable { [ObservableAsProperty] get; }
+        public string ToggleText { [ObservableAsProperty] get; }
+        [Reactive] public bool ShowCompleted { get; set; }
         [Reactive] public IList<TodoItemViewModel> List { get; private set; }
 
 
