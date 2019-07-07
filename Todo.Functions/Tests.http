@@ -2,7 +2,7 @@
 ## https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 #@BaseUri = http://localhost:7071/api
-@BaseUri = https://shinytodo.azurewebsites.net
+@BaseUri = https://shinytodo.azurewebsites.net/api
 
 ###
 # Save

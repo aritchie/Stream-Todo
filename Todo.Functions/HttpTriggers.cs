@@ -25,7 +25,7 @@ namespace Todo.Functions
 
         [FunctionName("Save")]
         public async Task<IActionResult> Save(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             // TODO: incoming soft delete - have to trigger delete back to client
@@ -62,7 +62,7 @@ namespace Todo.Functions
 
         [FunctionName("Get")]
         public async Task<IActionResult> Get(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             var query = this.data
