@@ -44,6 +44,15 @@ namespace Todo.Functions
             else
             {
                 // update local
+                local.Title = remote.Title;
+                local.Notes = remote.Notes;
+                local.DueDateUtc = remote.DueDateUtc;
+                local.CompletionDateUtc = remote.CompletionDateUtc;
+                local.DateUpdatedUtc = remote.DateUpdatedUtc;
+                local.IsDeleted = remote.IsDeleted;
+                local.GpsLatitude = remote.GpsLatitude;
+                local.GpsLongitude = remote.GpsLongitude;
+
                 await this.data.SaveChangesAsync();
             }
 

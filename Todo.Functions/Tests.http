@@ -1,0 +1,28 @@
+﻿## This file is meant for use with "REST Client for VS Code"
+## https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+#@BaseUri = http://localhost:7071/api
+@BaseUri = https://shinytodo.azurewebsites.net
+
+###
+# Save
+POST {{BaseUri}}/Save
+content-type: application/json
+
+{
+    "Id": "{{$guid}}",
+    "Title": "Test",
+    "Notes": "Notes",
+    "GpsLatitude": null,
+    "GpsLongitude": null,
+    "IsDeleted": false,
+    "DueDateUtc": null,
+    "CompletionDateUtc": null,
+    "DateUpdatedUtc": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+
+###
+# GET
+GET {{BaseUri}}/get
+content-type: application/json
