@@ -26,6 +26,6 @@ namespace Todo
         public bool HasDueDate => this.Item.DueDateUtc != null;
         public bool IsOverdue => this.Item.DueDateUtc != null &&
                                  this.Item.CompletionDateUtc == null &&
-                                 this.Item.DueDateUtc > DateTime.Now;
+                                 this.Item.DueDateUtc < DateTime.UtcNow;
     }
 }
