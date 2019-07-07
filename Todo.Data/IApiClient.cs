@@ -8,11 +8,11 @@ namespace Todo.Data
 {
     public interface IApiClient
     {
-        [Post("/Save")]
+        [Post("/api/Save")]
         Task Save(TodoItem item);
 
 
-        [Get("/Get?IncludeCompleted={includeCompleted}&Delta={deltaDate}")]
+        [Get("/api/Get?IncludeCompleted={includeCompleted}&Delta={deltaDate}")]
         Task<IEnumerable<TodoItem>> Get(bool includeCompleted, DateTime? deltaDate);
     }
 }
