@@ -21,7 +21,7 @@ namespace Todo
             services.RegisterStartupTask<GlobalExceptionHandler>();
             services.RegisterModule<DataModule>();
 
-            services.UseAppCenterLogging("#{AppCenterSecret}#");
+            services.UseAppCenterLogging(Constants.AppCenterSecret);
 #if DEBUG
             Log.UseConsole();
             Log.UseDebug();

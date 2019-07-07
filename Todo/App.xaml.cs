@@ -30,6 +30,7 @@ namespace Todo
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<EditPage>();
             containerRegistry.RegisterForNavigation<LocationPage>();
+            containerRegistry.RegisterForNavigation<TestPage>();
         }
 
 
