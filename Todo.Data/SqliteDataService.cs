@@ -9,12 +9,8 @@ namespace Todo.Data
     public class SqliteDataService : IDataService
     {
         readonly TodoSqliteConnection conn;
-
-
         public SqliteDataService(TodoSqliteConnection conn)
-        {
-            this.conn = conn;
-        }
+            => this.conn = conn;
 
 
         public async Task<ITodoItem> Create(Action<ITodoItem> itemAction)
@@ -41,7 +37,9 @@ namespace Todo.Data
         {
             var query = this.conn
                 .Todos
-                .Where(x => !x.IsDeleted);
+                .Where(x => !x.IsDeleted)
+                //.OrderByDescending(x => x.DateCreatedUtc)
+                .OrderBy(x => x.DueDateUtc);
 
             if (!includeCompleted)
                 query = query.Where(x => x.CompletionDateUtc == null);
