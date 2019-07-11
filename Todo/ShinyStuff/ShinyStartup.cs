@@ -16,8 +16,11 @@ namespace Todo
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUserDialogs, UserDialogs>();
+
             services.UseNotifications(true);
             services.UseGeofencing<GeofenceDelegate>();
+            services.UseGps();
+
             services.RegisterStartupTask<GlobalExceptionHandler>();
             services.RegisterModule<DataModule>();
 
