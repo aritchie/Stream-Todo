@@ -2,29 +2,45 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:ai="clr-namespace:AiForms.Renderers;assembly=SettingsView"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Todo.LocationPage"
              Title="Location">
     <ContentPage.Content>
-        <ai:SettingsView>
-            <ai:Section>
-                <ai:EntryCell Placeholder="Latitude"
-                              TextAlignment="Start"
-                              Keyboard="Numeric"
-                              ValueText="{Binding Latitude}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+        
+            <maps:Map x:Name="myMap"
+                      IsShowingUser="true"
+                      MapType="Street"
+                      MapClicked="OnMapClicked"
+                      Grid.Row="0" /> 
+    <!--        <ai:SettingsView>
+                <ai:Section>
+                    <ai:EntryCell Placeholder="Latitude"
+                                  TextAlignment="Start"
+                                  Keyboard="Numeric"
+                                  ValueText="{Binding Latitude}" />
 
-                <ai:EntryCell Placeholder="Longitude"
-                              TextAlignment="Start"
-                              Keyboard="Numeric"
-                              ValueText="{Binding Longitude}" />
-            </ai:Section>
+                    <ai:EntryCell Placeholder="Longitude"
+                                  TextAlignment="Start"
+                                  Keyboard="Numeric"
+                                  ValueText="{Binding Longitude}" />
+                </ai:Section>
 
-            <ai:Section>
-                <ai:CommandCell Title="Save Location"
-                                Command="{Binding PickLocation}" />
-            </ai:Section>
-        </ai:SettingsView>
+                <ai:Section>
+                    <ai:CommandCell Title="Save Location"
+                                    Command="{Binding PickLocation}" />
+                </ai:Section>
+            </ai:SettingsView>-->
+            <Button Text="Save Location"
+                    Command="{Binding PickLocation}"
+                    Grid.Row="1" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

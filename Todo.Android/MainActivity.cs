@@ -6,7 +6,7 @@ using Android.Runtime;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using Shiny;
-
+using Xamarin;
 
 namespace Todo.Droid
 {
@@ -26,6 +26,7 @@ namespace Todo.Droid
 
             base.OnCreate(savedInstanceState);
             Forms.Init(this, savedInstanceState);
+            FormsMaps.Init(this, savedInstanceState);
             AiForms.Renderers.Droid.SettingsViewInit.Init();
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
 
@@ -34,6 +35,9 @@ namespace Todo.Droid
 
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
-            => AndroidShinyHost.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        {
+            AndroidShinyHost.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

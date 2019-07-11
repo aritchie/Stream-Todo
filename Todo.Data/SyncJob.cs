@@ -13,7 +13,10 @@ namespace Todo.Data
         readonly IApiClient apiClient;
 
 
-        public SyncJob(IApiClient apiClient, TodoSqliteConnection data)
+        public SyncJob(IApiClient apiClient, 
+                       //INotificationManager notifications,
+                       //IGeofenceManager geofences,
+                       TodoSqliteConnection data)
         {
             this.apiClient = apiClient;
             this.data = data;
@@ -47,7 +50,11 @@ namespace Todo.Data
         {
             var todos = await this.apiClient.Get(true, jobInfo.LastRunUtc);
             foreach (var todo in todos)
-                await this.data.InsertOrReplaceAsync(todo);
+            {
+                //await this.data.InsertOrReplaceAsync(todo);
+                var existing = await this.data.GetAsync<TodoItem>(todo.Id);
+
+            }
 
             return todos.Any();
         }

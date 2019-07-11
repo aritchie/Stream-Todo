@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using UIKit;
+using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Shiny;
@@ -16,6 +17,7 @@ namespace Todo.iOS
         {
             iOSShinyHost.Init(new ShinyStartup());
             Forms.Init();
+            FormsMaps.Init();
             this.LoadApplication(new App());
             AiForms.Renderers.iOS.SettingsViewInit.Init();
             Rg.Plugins.Popup.Popup.Init();
