@@ -7,7 +7,7 @@ using Shiny.Logging;
 
 namespace Todo.Infrastructure
 {
-    public class GlobalExceptionHandler : IObserver<Exception>, IStartupTask
+    public class GlobalExceptionHandler : IObserver<Exception>, IShinyStartupTask
     {
         readonly IUserDialogs dialogs;
         public GlobalExceptionHandler(IUserDialogs dialogs) => this.dialogs = dialogs;

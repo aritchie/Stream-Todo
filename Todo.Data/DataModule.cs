@@ -7,7 +7,7 @@ using Shiny.Jobs;
 
 namespace Todo.Data
 {
-    public class DataModule : Module
+    public class DataModule : ShinyModule
     {
         public override void Register(IServiceCollection services)
         {

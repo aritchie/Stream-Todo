@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shiny;
-using Shiny.Notifications;
-using Shiny.Locations;
 using Shiny.Logging;
 using Todo.Data;
 using Todo.Infrastructure;
@@ -11,7 +9,7 @@ using Acr.UserDialogs.Forms;
 
 namespace Todo
 {
-    public class ShinyStartup : Startup
+    public class ShinyStartup : Shiny.ShinyStartup
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -19,7 +17,7 @@ namespace Todo
 
             services.UseNotifications(true);
             services.UseGeofencing<GeofenceDelegate>();
-            services.UseGps();
+            //services.UseGps<>
 
             services.RegisterStartupTask<GlobalExceptionHandler>();
             services.RegisterModule<DataModule>();
