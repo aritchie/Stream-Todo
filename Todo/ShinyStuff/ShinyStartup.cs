@@ -2,16 +2,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shiny;
 using Shiny.Logging;
+using Shiny.Prism;
 using Todo.Data;
 using Todo.Infrastructure;
 using Acr.UserDialogs.Forms;
+using Prism.DryIoc;
 
 
 namespace Todo
 {
-    public class ShinyStartup : Shiny.ShinyStartup
+    public class ShinyStartup : PrismStartup
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public ShinyStartup() : base(PrismContainerExtension.Current) { }
+
+
+        protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUserDialogs, UserDialogs>();
 
