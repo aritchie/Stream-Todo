@@ -24,7 +24,7 @@ namespace Todo
             services.UseGeofencing<GeofenceDelegate>();
             //services.UseGps<>
 
-            services.RegisterStartupTask<GlobalExceptionHandler>();
+            services.AddSingleton<GlobalExceptionHandler>();
             services.RegisterModule<DataModule>();
 
             services.UseAppCenterLogging(Constants.AppCenterSecret);

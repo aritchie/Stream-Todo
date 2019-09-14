@@ -13,15 +13,15 @@
     <ItemGroup>
         <PackageReference Include="Acr.UserDialogs.Forms" Version="1.0.0.7-beta" />
         <PackageReference Include="LiveXAML" Version="2.1.72" />
-        <PackageReference Include="Prism.DryIoc.Forms.Extended" Version="7.2.0.550" />
-        <PackageReference Include="Shiny.Logging.AppCenter" Version="1.0.0.363-beta" />
+        <PackageReference Include="Prism.DryIoc.Forms.Extended" Version="7.2.0.619" />
+        <PackageReference Include="Shiny.Logging.AppCenter" Version="1.0.0.391-beta" />
         <PackageReference Include="Shiny.Prism" Version="7.2.0.550-pre" />
-        <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
-        <PackageReference Include="ReactiveUI.Fody" Version="9.22.1" />
+        <PackageReference Include="Xamarin.Forms" Version="4.2.0.778463" />
+        <PackageReference Include="ReactiveUI.Fody" Version="10.1.6" />
         <PackageReference Include="AiForms.SettingsView" Version="0.5.2" />
-        <PackageReference Include="Shiny.Notifications" Version="1.0.0.363-beta" />
-        <PackageReference Include="Shiny.Locations" Version="1.0.0.363-beta" />
-        <PackageReference Include="Xamarin.Forms.Maps" Version="4.2.0.709249" />
+        <PackageReference Include="Shiny.Notifications" Version="1.0.0.391-beta" />
+        <PackageReference Include="Shiny.Locations" Version="1.0.0.391-beta" />
+        <PackageReference Include="Xamarin.Forms.Maps" Version="4.2.0.778463" />
     </ItemGroup>
 
     <ItemGroup>
