@@ -18,20 +18,19 @@ namespace Todo
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IUserDialogs, UserDialogs>();
-
-            services.UseNotifications(true);
-            services.UseGeofencing<GeofenceDelegate>();
-            //services.UseGps<>
-
-            services.AddSingleton<GlobalExceptionHandler>();
-            services.RegisterModule<DataModule>();
-
-            services.UseAppCenterLogging(Constants.AppCenterSecret);
 #if DEBUG
             Log.UseConsole();
             Log.UseDebug();
 #endif
+
+            services.UseNotifications(true);
+            services.UseGeofencing<GeofenceDelegate>();
+            services.AddSingleton<ITodoService, TodoService>();
+            services.UseAppCenterLogging(Constants.AppCenterSecret);
+
+            services.RegisterModule<DataModule>();
+            services.AddSingleton<GlobalExceptionHandler>();
+            services.AddSingleton<IUserDialogs, UserDialogs>();
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Todo
 {
     public class TodoItemViewModel : ReactiveObject
     {
-        public TodoItemViewModel(ITodoItem item) => this.Item = item;
+        public TodoItemViewModel(TodoItem item) => this.Item = item;
 
         public ICommand Edit { get; set; }
         public ICommand Delete { get; set; }
         public ICommand MarkComplete { get; set; }
-        public ITodoItem Item { get; }
+        public TodoItem Item { get; }
 
         public string Title => this.Item.Title;
         public string Notes => this.Item.Notes;

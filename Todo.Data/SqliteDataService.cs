@@ -6,25 +6,27 @@ using System.Threading.Tasks;
 
 namespace Todo.Data
 {
-    public class SqliteDataService : IDataService
+    class SqliteDataService : IDataService
     {
         readonly TodoSqliteConnection conn;
         public SqliteDataService(TodoSqliteConnection conn)
             => this.conn = conn;
 
 
-        public async Task<ITodoItem> Create(Action<ITodoItem> itemAction)
+        public Task Create(TodoItem item) => this.conn.InsertAsync(item);
+        public Task Update(TodoItem item) => this.conn.UpdateAsync(item);
+
+
+        public async Task<TodoItem> GetById(Guid itemId)
         {
-            var item = new TodoItem();
-            itemAction(item);
-            await this.conn.InsertAsync(item);
-            return item;
+            var result = await this.conn.GetAsync<SqliteTodoItem>(itemId);
+            return result as TodoItem;
         }
 
 
         public async Task Delete(Guid itemId)
         {
-            var item = await this.conn.GetAsync<TodoItem>(itemId);
+            var item = await this.conn.GetAsync<SqliteTodoItem>(itemId);
             if (item != null)
             {
                 item.IsDeleted = true;
@@ -33,7 +35,7 @@ namespace Todo.Data
         }
 
 
-        public async Task<IList<ITodoItem>> GetAll(bool includeCompleted)
+        public async Task<IList<TodoItem>> GetAll(bool includeCompleted)
         {
             var query = this.conn
                 .Todos
@@ -46,17 +48,10 @@ namespace Todo.Data
 
             var results = await query.ToListAsync();
             var list = results
-                .OfType<ITodoItem>()
+                .OfType<TodoItem>()
                 .ToList();
 
             return list;
         }
-
-        public async Task<ITodoItem> GetById(Guid itemId)
-            => await this.conn.GetAsync<TodoItem>(itemId);
-
-
-        public Task Update(ITodoItem item)
-            => this.conn.UpdateAsync(item);
     }
 }

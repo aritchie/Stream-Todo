@@ -16,16 +16,16 @@ namespace Todo
     public class MainViewModel : ViewModel
     {
         readonly IUserDialogs dialogs;
-        readonly IDataService data;
         readonly INavigationService navigator;
+        readonly ITodoService todoService;
 
 
-        public MainViewModel(IDataService dataService,
+        public MainViewModel(ITodoService todoService,
                              IUserDialogs dialogs,
                              IConnectivity connectivity,
                              INavigationService navigator)
         {
-            this.data = dataService;
+            this.todoService = todoService;
             this.dialogs = dialogs;
             this.navigator = navigator;
 
@@ -36,7 +36,7 @@ namespace Todo
 
             this.Add = navigator.NavigateCommand("EditPage");
 
-            this.ToggleShowCompleted = ReactiveCommand.Create(() => 
+            this.ToggleShowCompleted = ReactiveCommand.Create(() =>
             {
                 this.ShowCompleted = !this.ShowCompleted;
                 this.DoLoad();
@@ -44,7 +44,7 @@ namespace Todo
 
             this.Load = ReactiveCommand.CreateFromTask(async () =>
             {
-                var todos = await dataService.GetAll(this.ShowCompleted);
+                var todos = await todoService.GetList(this.ShowCompleted);
                 this.List = todos.Select(ToViewModel).ToList();
             });
 
@@ -73,7 +73,7 @@ namespace Todo
         void DoLoad() => ((ICommand)this.Load).Execute(null);
 
 
-        TodoItemViewModel ToViewModel(ITodoItem item)
+        TodoItemViewModel ToViewModel(TodoItem item)
         {
             var vm = new TodoItemViewModel(item);
 
@@ -86,7 +86,7 @@ namespace Todo
                 var confirm = await this.dialogs.Confirm($"Are you sure you wish to delete '${item.Title}'");
                 if (confirm)
                 {
-                    await this.data.Delete(item.Id);
+                    await this.todoService.Remove(item.Id);
                     this.DoLoad();
                 }
             });
@@ -97,13 +97,10 @@ namespace Todo
                 else
                     item.CompletionDateUtc = null;
 
-                await this.data.Update(item);
+                await this.todoService.Save(item);
 
                 vm.RaisePropertyChanged(nameof(vm.IsCompleted));
                 vm.RaisePropertyChanged(nameof(vm.IsOverdue));
-
-                // TODO: for unit testing later
-                // TODO: cancel notification & geofence if completed
             });
             return vm;
         }

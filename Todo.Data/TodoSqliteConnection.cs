@@ -6,15 +6,15 @@ using SQLite;
 
 namespace Todo.Data
 {
-    public class TodoSqliteConnection : SQLiteAsyncConnection
+    class TodoSqliteConnection : SQLiteAsyncConnection
     {
         public TodoSqliteConnection(IFileSystem fileSystem)
             : base(Path.Combine(fileSystem.AppData.FullName, "todo.db"))
         {
-            this.GetConnection().CreateTable<TodoItem>();
+            this.GetConnection().CreateTable<SqliteTodoItem>();
         }
 
 
-        public AsyncTableQuery<TodoItem> Todos => this.Table<TodoItem>();
+        public AsyncTableQuery<SqliteTodoItem> Todos => this.Table<SqliteTodoItem>();
     }
 }

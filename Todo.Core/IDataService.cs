@@ -7,10 +7,10 @@ namespace Todo
 {
     public interface IDataService
     {
-        Task<IList<ITodoItem>> GetAll(bool includeCompleted);
-        Task<ITodoItem> GetById(Guid itemId);
+        Task<IList<TodoItem>> GetAll(bool includeCompleted);
+        Task<TodoItem> GetById(Guid itemId);
         Task Delete(Guid itemId);
-        Task Update(ITodoItem item);
-        Task<ITodoItem> Create(Action<ITodoItem> item);
+        Task Update(TodoItem item);
+        Task Create(TodoItem item);
     }
 }

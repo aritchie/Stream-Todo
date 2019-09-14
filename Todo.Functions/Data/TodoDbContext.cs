@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Todo.Functions.Models;
 
 
 namespace Todo.Functions.Data
@@ -13,10 +14,15 @@ namespace Todo.Functions.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            var table = modelBuilder.Entity<TodoItem>();
-            table.ToTable("TodoItems");
-            table.HasKey(x => x.Id);
-            table.Property(x => x.Id).HasColumnName("TodoItemId");
+            var todo = modelBuilder.Entity<TodoItem>();
+            todo.ToTable("TodoItems");
+            todo.HasKey(x => x.Id);
+            todo.Property(x => x.Id).HasColumnName("TodoItemId");
+
+            var user = modelBuilder.Entity<User>();
+            user.ToTable("Users");
+            user.HasKey(x => x.Id);
+            user.Property(x => x.Id).HasColumnName("UserId");
         }
     }
 }

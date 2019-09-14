@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <DefineConstants>MOBILE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +12,5 @@
     <ItemGroup>
         <ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
     </ItemGroup>
-
-    <Import Project="..\Todo.Models\Todo.Models.projitems" Label="Shared" />
 
 </Project>

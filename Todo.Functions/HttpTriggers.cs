@@ -29,32 +29,32 @@ namespace Todo.Functions
             ILogger log)
         {
             // TODO: incoming soft delete - have to trigger delete back to client
-            var remote = await req.ReadAs<TodoItem>();
-            var local = await this.data.Items.FindAsync(remote.Id);
-            if (local == null)
-            {
-                // new item
-                this.data.Items.Add(remote);
-                await this.data.SaveChangesAsync();
-            }
-            else if (local.DateUpdatedUtc > remote.DateUpdatedUtc)
-            {
-                // merge conflict
-            }
-            else
-            {
-                // update local
-                local.Title = remote.Title;
-                local.Notes = remote.Notes;
-                local.DueDateUtc = remote.DueDateUtc;
-                local.CompletionDateUtc = remote.CompletionDateUtc;
-                local.DateUpdatedUtc = remote.DateUpdatedUtc;
-                local.IsDeleted = remote.IsDeleted;
-                local.GpsLatitude = remote.GpsLatitude;
-                local.GpsLongitude = remote.GpsLongitude;
+            //var remote = await req.ReadAs<TodoItem>();
+            //var local = await this.data.Items.FindAsync(remote.Id);
+            //if (local == null)
+            //{
+            //    // new item
+            //    this.data.Items.Add(remote);
+            //    await this.data.SaveChangesAsync();
+            //}
+            //else if (local.DateUpdatedUtc > remote.DateUpdatedUtc)
+            //{
+            //    // merge conflict
+            //}
+            //else
+            //{
+            //    // update local
+            //    local.Title = remote.Title;
+            //    local.Notes = remote.Notes;
+            //    local.DueDateUtc = remote.DueDateUtc;
+            //    local.CompletionDateUtc = remote.CompletionDateUtc;
+            //    local.DateUpdatedUtc = remote.DateUpdatedUtc;
+            //    local.IsDeleted = remote.IsDeleted;
+            //    local.GpsLatitude = remote.GpsLatitude;
+            //    local.GpsLongitude = remote.GpsLongitude;
 
-                await this.data.SaveChangesAsync();
-            }
+            //    await this.data.SaveChangesAsync();
+            //}
 
             return new OkObjectResult("");
         }

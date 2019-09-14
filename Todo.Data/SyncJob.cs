@@ -7,13 +7,13 @@ using Shiny.Jobs;
 
 namespace Todo.Data
 {
-    public class SyncJob : IJob
+    class SyncJob : IJob
     {
         readonly TodoSqliteConnection data;
         readonly IApiClient apiClient;
 
 
-        public SyncJob(IApiClient apiClient, 
+        public SyncJob(IApiClient apiClient,
                        //INotificationManager notifications,
                        //IGeofenceManager geofences,
                        TodoSqliteConnection data)
