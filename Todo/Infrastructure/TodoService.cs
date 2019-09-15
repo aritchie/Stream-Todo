@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Acr.UserDialogs.Forms;
 using Shiny.Locations;
 using Shiny.Notifications;
+
 
 namespace Todo.Infrastructure
 {
@@ -11,15 +13,18 @@ namespace Todo.Infrastructure
         readonly IDataService dataService;
         readonly INotificationManager notificationManager;
         readonly IGeofenceManager geofenceManager;
+        readonly IUserDialogs dialogs;
 
 
         public TodoService(IDataService dataService,
                            INotificationManager notificationManager,
-                           IGeofenceManager geofenceManager)
+                           IGeofenceManager geofenceManager,
+                           IUserDialogs dialogs)
         {
             this.dataService = dataService;
             this.notificationManager = notificationManager;
             this.geofenceManager = geofenceManager;
+            this.dialogs = dialogs;
         }
 
 
@@ -27,10 +32,14 @@ namespace Todo.Infrastructure
 
         public async Task Remove(Guid todoItemId)
         {
-            await this.dataService.Delete(todoItemId);
-            await this.geofenceManager.StopMonitoring(todoItemId.ToString());
-            //this.notificationManager.Cancel(todoItemId.ToString());
+            var todo = await this.dataService.GetById(todoItemId);
+            if (todo != null)
+            {
+                await this.CancelBgEvents(todo);
+                await this.dataService.Delete(todo.Id);
+            }
         }
+
 
         public Task Save(TodoItem todo)
         {
@@ -43,12 +52,31 @@ namespace Todo.Infrastructure
 
         async Task Create(TodoItem todo)
         {
-            // TODO: if existing, I may have to create geofences and notifications
-
-            // if new
             await this.dataService.Create(todo);
+            await this.SetupBgEvents(todo);
+        }
 
-            if (todo.DueDateUtc != null)
+
+        async Task Update(TodoItem todo)
+        {
+            await this.CancelBgEvents(todo);
+            await this.SetupBgEvents(todo);
+            await this.dataService.Update(todo);
+        }
+
+
+        async Task CancelBgEvents(TodoItem todo)
+        {
+            await this.dataService.Delete(todo.Id);
+            await this.geofenceManager.StopMonitoring(todo.Id.ToString());
+            // TODO: notification Id it integer based because android
+            //this.notificationManager.Cancel(todoItemId.ToString());
+        }
+
+
+        async Task SetupBgEvents(TodoItem todo)
+        {
+            if (todo.DueDateUtc != null && todo.DueDateUtc > DateTime.UtcNow)
             {
                 await this.notificationManager.Send(new Notification
                 {
@@ -70,14 +98,6 @@ namespace Todo.Infrastructure
                     NotifyOnExit = false
                 });
             }
-        }
-
-
-        async Task Update(TodoItem todo)
-        {
-            // TODO: for unit testing later
-            // TODO: cancel notification & geofence if completed
-
         }
     }
 }

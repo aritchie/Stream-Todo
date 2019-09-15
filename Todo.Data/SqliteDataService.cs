@@ -13,8 +13,32 @@ namespace Todo.Data
             => this.conn = conn;
 
 
-        public Task Create(TodoItem item) => this.conn.InsertAsync(item);
-        public Task Update(TodoItem item) => this.conn.UpdateAsync(item);
+        public Task Create(TodoItem item)
+            => this.conn.InsertAsync(new SqliteTodoItem
+            {
+                Id = Guid.NewGuid(),
+                Title = item.Title,
+                Notes = item.Notes,
+                GpsLatitude = item.GpsLatitude,
+                GpsLongitude = item.GpsLongitude,
+                DueDateUtc = item.DueDateUtc,
+                DateUpdatedUtc = DateTime.UtcNow,
+                CompletionDateUtc = null
+            });
+
+
+        public Task Update(TodoItem item)
+            => this.conn.UpdateAsync(new SqliteTodoItem
+            {
+                Id = item.Id,
+                Title = item.Title,
+                Notes = item.Notes,
+                GpsLatitude = item.GpsLatitude,
+                GpsLongitude = item.GpsLongitude,
+                DueDateUtc = item.DueDateUtc,
+                DateUpdatedUtc = DateTime.UtcNow,
+                CompletionDateUtc = item.CompletionDateUtc
+            });
 
 
         public async Task<TodoItem> GetById(Guid itemId)

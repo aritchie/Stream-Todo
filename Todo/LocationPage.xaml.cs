@@ -10,6 +10,9 @@ namespace Todo
 {
     public partial class LocationPage : ContentPage
     {
+        IDisposable sub;
+
+
         public LocationPage()
         {
             this.InitializeComponent();
@@ -22,7 +25,7 @@ namespace Todo
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            this.ViewModel
+            this.sub = this.ViewModel
                 .WhenAnyValue(
                     x => x.Latitude,
                     x => x.Longitude
@@ -34,11 +37,16 @@ namespace Todo
                     this.myMap.Pins.Add(new Pin
                     {
                         Label = "Somewhere",
-                        Position = new Position(x.Item1, x.Item2)
+                        Position = new Position(x.Item1.Value, x.Item2.Value)
                     });
                 });
-                //.DisposeWith(this.ViewModel.Dis);
+        }
 
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            this.sub?.Dispose();
         }
 
 

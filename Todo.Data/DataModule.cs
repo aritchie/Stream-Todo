@@ -11,18 +11,17 @@ namespace Todo.Data
     {
         public override void Register(IServiceCollection services)
         {
-            // TODO: startup job to pull initial data/run initial job right away?
             services.AddSingleton(_ => RestService.For<IApiClient>(Constants.BaseApiUri));
             services.AddSingleton<TodoSqliteConnection>();
             services.AddSingleton<IDataService, SqliteDataService>();
 
-            services.RegisterJob(new JobInfo
-            {
-                Identifier = nameof(SyncJob),
-                Type = typeof(SyncJob),
-                BatteryNotLow = true,
-                RequiredInternetAccess = InternetAccess.Any
-            });
+            //services.RegisterJob(new JobInfo
+            //{
+            //    Identifier = nameof(SyncJob),
+            //    Type = typeof(SyncJob),
+            //    BatteryNotLow = true,
+            //    RequiredInternetAccess = InternetAccess.Any
+            //});
         }
     }
 }

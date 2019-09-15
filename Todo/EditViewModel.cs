@@ -6,6 +6,8 @@ using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Shiny;
+using Shiny.Locations;
+using Shiny.Notifications;
 
 
 namespace Todo
@@ -14,6 +16,8 @@ namespace Todo
     {
         public EditViewModel(INavigationService navigator,
                              IUserDialogs dialogs,
+                             IGeofenceManager geofences,
+                             INotificationManager notifications,
                              ITodoService todoService)
         {
             this.WhenAnyValue(
@@ -29,32 +33,6 @@ namespace Todo
                 0
             ))
             .ToPropertyEx(this, x => x.AlarmDate);
-
-            //this.WhenAnyValue(x => x.RemindOnDay)
-            //    .Skip(1)
-            //    .Where(x => x)
-            //    .SubscribeAsync(async () =>
-            //    {
-            //        var access = await notifications.RequestAccess();
-            //        if (access != AccessState.Available)
-            //        {
-            //            this.RemindOnDay = false;
-            //            await dialogs.Alert("Permission denied for notifications");
-            //        }
-            //    });
-
-            //this.WhenAnyValue(x => x.RemindOnLocation)
-            //    .Skip(1)
-            //    .Where(x => x)
-            //    .SubscribeAsync(async () =>
-            //    {
-            //        var access = await geofences.RequestAccess();
-            //        if (access != AccessState.Available)
-            //        {
-            //            this.RemindOnDay = false;
-            //            await dialogs.Alert("Permission denied for geofences");
-            //        }
-            //    });
 
             this.WhenAnyValue(
                 x => x.RemindOnLocation,
@@ -73,19 +51,48 @@ namespace Todo
             this.Date = DateTime.Now.AddDays(1);
             this.Time = this.Date.TimeOfDay;
 
+            this.WhenAnyValue(x => x.RemindOnDay)
+                .Skip(1)
+                .Where(x => x)
+                .SubscribeAsync(async () =>
+                {
+                    var access = await notifications.RequestAccess();
+                    if (access != AccessState.Available)
+                    {
+                        this.RemindOnDay = false;
+                        await dialogs.Alert("Permission denied for notifications");
+                    }
+                });
+
+            this.WhenAnyValue(x => x.RemindOnLocation)
+                .Skip(1)
+                .Where(x => x)
+                .SubscribeAsync(async () =>
+                {
+                    var access = await geofences.RequestAccess();
+                    if (access != AccessState.Available)
+                    {
+                        this.RemindOnDay = false;
+                        await dialogs.Alert("Permission denied for geofences");
+                    }
+                });
+
             this.SetLocation = navigator.NavigateCommand("LocationPage");
             this.Save = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
+                    var item = this.existingItem ?? new TodoItem();
+                    item.Title = this.ReminderTitle;
+                    item.Notes = this.Notes;
+                    if (this.RemindOnDay)
+                        item.DueDateUtc = this.AlarmDate;
 
-                    //{
-                    //    newItem.Title = this.ReminderTitle;
-                    //    newItem.Notes = this.Notes;
-                    //    if (this.RemindOnDay)
-                    //        newItem.DueDateUtc = this.AlarmDate;
-                    //});
-
-                    //await todoService.Save(null);
+                    if (this.RemindOnLocation)
+                    {
+                        item.GpsLatitude = this.Latitude;
+                        item.GpsLongitude = this.Longitude;
+                    }
+                    await todoService.Save(item);
                     await navigator.GoBack();
                 },
                 this.WhenAny(
@@ -127,9 +134,16 @@ namespace Todo
                     break;
 
                 case NavigationMode.New:
-                    //if (parameters.ContainsKey("Item"))
-                    //    this.existingItem = parameters.GetValue<ITodoItem>("Item");
-                    this.Title = "New Todo";
+                    if (!parameters.ContainsKey("Item"))
+                    {
+                        this.Title = "New Todo";
+
+                    }
+                    else
+                    {
+                        this.existingItem = parameters.GetValue<TodoItem>("Item");
+                        this.Title = this.existingItem.Title;
+                    }
                     break;
             }
         }
