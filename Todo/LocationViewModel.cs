@@ -8,6 +8,7 @@ using ReactiveUI.Fody.Helpers;
 using Shiny.Locations;
 using Shiny.Logging;
 
+
 namespace Todo
 {
     public class LocationViewModel : ViewModel
@@ -18,6 +19,7 @@ namespace Todo
         public LocationViewModel(INavigationService navigator, IGpsManager gpsManager)
         {
             this.gpsManager = gpsManager;
+
             this.Cancel = navigator.GoBackCommand();
 
             this.PickLocation = navigator.GoBackCommand(

@@ -25,6 +25,7 @@ namespace Todo
 
             services.UseNotifications(true);
             services.UseGeofencing<GeofenceDelegate>();
+            services.UseGps();
             services.AddSingleton<ITodoService, TodoService>();
             services.UseAppCenterLogging(Constants.AppCenterSecret);
 

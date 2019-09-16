@@ -17,8 +17,8 @@ namespace Todo.Data
             => this.conn.InsertAsync(new SqliteTodoItem
             {
                 Id = Guid.NewGuid(),
-                Title = item.Title,
-                Notes = item.Notes,
+                Title = item.Title ?? String.Empty,
+                Notes = item.Notes ?? String.Empty,
                 GpsLatitude = item.GpsLatitude,
                 GpsLongitude = item.GpsLongitude,
                 DueDateUtc = item.DueDateUtc,
@@ -31,14 +31,15 @@ namespace Todo.Data
             => this.conn.UpdateAsync(new SqliteTodoItem
             {
                 Id = item.Id,
-                Title = item.Title,
-                Notes = item.Notes,
+                Title = item.Title ?? String.Empty,
+                Notes = item.Notes ?? String.Empty,
                 GpsLatitude = item.GpsLatitude,
                 GpsLongitude = item.GpsLongitude,
                 DueDateUtc = item.DueDateUtc,
                 DateUpdatedUtc = DateTime.UtcNow,
                 CompletionDateUtc = item.CompletionDateUtc
             });
+
 
 
         public async Task<TodoItem> GetById(Guid itemId)

@@ -10,11 +10,15 @@ namespace Todo
 {
     public static class ExtensionsPrism
     {
-        public static Task Navigate(this INavigationService navigation, string uri, params (string, object)[] parameters)
-            => navigation.Navigate(uri, parameters.ToNavParams());
+        public static async Task Navigate(this INavigationService navigation, string uri, params (string, object)[] parameters)
+        {
+            var result = await navigation.NavigateAsync(uri, parameters);
+            if (!result.Success)
+                Console.WriteLine("[NAV FAIL] " + result.Exception);
+        }
 
 
-        public static async Task Navigate(this INavigationService navigation, string uri, INavigationParameters parameters)
+        public static async Task Navigate(this INavigationService navigation, string uri, INavigationParameters parameters = null)
         {
             var result = await navigation.NavigateAsync(uri, parameters);
             if (!result.Success)
@@ -26,9 +30,14 @@ namespace Todo
         public static ICommand NavigateCommand(this INavigationService navigation, string uri, Action<INavigationParameters> getParams = null, IObservable<bool> canExecute = null)
             => ReactiveCommand.CreateFromTask(async () =>
             {
-                var p = new NavigationParameters();
-                getParams?.Invoke(p);
-                await navigation.Navigate(uri, p);
+                if (getParams == null)
+                    await navigation.Navigate(uri);
+                else
+                {
+                    var p = new NavigationParameters();
+                    getParams.Invoke(p);
+                    await navigation.Navigate(uri, p);
+                }
             }, canExecute);
 
 
@@ -42,8 +51,16 @@ namespace Todo
 
 
 
-        public static Task GoBack(this INavigationService navigation, bool toRoot = false, params (string, object)[] parameters)
-            => navigation.GoBack(toRoot, parameters.ToNavParams());
+        public static async Task GoBack(this INavigationService navigation, bool toRoot = false, params (string, object)[] parameters)
+        {
+            var task = toRoot
+                ? navigation.GoBackToRootAsync(parameters.ToNavParams())
+                : navigation.GoBackAsync(parameters);
+
+            var result = await task.ConfigureAwait(false);
+            if (!result.Success)
+                Console.WriteLine("[NAV FAIL] " + result.Exception);
+        }
 
 
         public static async Task GoBack(this INavigationService navigation, bool toRoot = false, INavigationParameters parameters = null)
