@@ -12,10 +12,8 @@
 
     <ItemGroup>
         <PackageReference Include="Acr.UserDialogs.Forms" Version="1.0.0.7-beta" />
-        <PackageReference Include="LiveXAML" Version="2.1.72" />
-        <PackageReference Include="Prism.DryIoc.Forms.Extended" Version="7.2.0.619" />
+        <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1367" />
         <PackageReference Include="Shiny.Logging.AppCenter" Version="1.0.0.393-beta" />
-        <PackageReference Include="Shiny.Prism" Version="7.2.0.550-pre" />
         <PackageReference Include="Xamarin.Forms" Version="4.2.0.778463" />
         <PackageReference Include="ReactiveUI.Fody" Version="10.1.6" />
         <PackageReference Include="AiForms.SettingsView" Version="0.5.2" />

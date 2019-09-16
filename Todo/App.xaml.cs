@@ -1,7 +1,9 @@
 ﻿using System;
+using DryIoc;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Shiny;
 using Xamarin.Forms;
 
 
@@ -9,7 +11,19 @@ namespace Todo
 {
     public partial class App : PrismApplication
     {
-        protected override IContainerExtension CreateContainerExtension() => PrismContainerExtension.Current;
+        protected override IContainerExtension CreateContainerExtension()
+        {
+            var container = new Container(this.CreateContainerRules());
+            ShinyHost.Populate((serviceType, func, lifetime) =>
+                container.RegisterDelegate(
+                    serviceType,
+                    _ => func(),
+                    Reuse.Singleton // HACK: I know everything is singleton
+                )
+            );
+            return new DryIocContainerExtension(container);
+        }
+
 
         protected override async void OnInitialized()
         {
