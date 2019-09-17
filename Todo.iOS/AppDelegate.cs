@@ -15,7 +15,7 @@ namespace Todo.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            iOSShinyHost.Init(new ShinyStartup());
+            iOSShinyHost.Init(new Startup());
             Forms.Init();
             FormsMaps.Init();
             this.LoadApplication(new App());
