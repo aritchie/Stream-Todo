@@ -5,8 +5,10 @@ using Android.OS;
 using Android.Runtime;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
-using Shiny;
 using Xamarin;
+using XF.Material.Droid;
+using Shiny;
+
 
 namespace Todo.Droid
 {
@@ -28,7 +30,7 @@ namespace Todo.Droid
             Forms.Init(this, savedInstanceState);
             FormsMaps.Init(this, savedInstanceState);
             AiForms.Renderers.Droid.SettingsViewInit.Init();
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            Material.Init(this, savedInstanceState);
 
             this.LoadApplication(new App());
         }

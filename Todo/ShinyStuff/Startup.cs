@@ -4,7 +4,7 @@ using Shiny;
 using Shiny.Logging;
 using Todo.Data;
 using Todo.Infrastructure;
-using Acr.UserDialogs.Forms;
+using XF.Material.Forms.UI.Dialogs;
 
 
 namespace Todo
@@ -26,7 +26,7 @@ namespace Todo
 
             services.RegisterModule<DataModule>();
             services.AddSingleton<GlobalExceptionHandler>();
-            services.AddSingleton<IUserDialogs, UserDialogs>();
+            services.AddSingleton(MaterialDialog.Instance);
         }
     }
 }

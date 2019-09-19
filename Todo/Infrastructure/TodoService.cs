@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Acr.UserDialogs.Forms;
+using XF.Material.Forms.UI.Dialogs;
 using Shiny.Locations;
 using Shiny.Notifications;
 
@@ -13,13 +13,13 @@ namespace Todo.Infrastructure
         readonly IDataService dataService;
         readonly INotificationManager notificationManager;
         readonly IGeofenceManager geofenceManager;
-        readonly IUserDialogs dialogs;
+        readonly IMaterialDialog dialogs;
 
 
         public TodoService(IDataService dataService,
                            INotificationManager notificationManager,
                            IGeofenceManager geofenceManager,
-                           IUserDialogs dialogs)
+                           IMaterialDialog dialogs)
         {
             this.dataService = dataService;
             this.notificationManager = notificationManager;

@@ -4,7 +4,9 @@ using UIKit;
 using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
+using XF.Material.iOS;
 using Shiny;
+using AiForms.Renderers.iOS;
 
 
 namespace Todo.iOS
@@ -19,8 +21,8 @@ namespace Todo.iOS
             Forms.Init();
             FormsMaps.Init();
             this.LoadApplication(new App());
-            AiForms.Renderers.iOS.SettingsViewInit.Init();
-            Rg.Plugins.Popup.Popup.Init();
+            SettingsViewInit.Init();
+            Material.Init();
 
             return base.FinishedLaunching(app, options);
         }

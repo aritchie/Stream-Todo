@@ -7,7 +7,7 @@ using System.Windows.Input;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Acr.UserDialogs.Forms;
+using XF.Material.Forms.UI.Dialogs;
 using Shiny.Net;
 
 
@@ -15,13 +15,13 @@ namespace Todo
 {
     public class MainViewModel : ViewModel
     {
-        readonly IUserDialogs dialogs;
+        readonly IMaterialDialog dialogs;
         readonly INavigationService navigator;
         readonly ITodoService todoService;
 
 
         public MainViewModel(ITodoService todoService,
-                             IUserDialogs dialogs,
+                             IMaterialDialog dialogs,
                              IConnectivity connectivity,
                              INavigationService navigator)
         {
@@ -83,8 +83,8 @@ namespace Todo
             );
             vm.Delete = ReactiveCommand.CreateFromTask(async () =>
             {
-                var confirm = await this.dialogs.Confirm($"Are you sure you wish to delete '${item.Title}'");
-                if (confirm)
+                var confirm = await this.dialogs.ConfirmAsync($"Are you sure you wish to delete '${item.Title}'");
+                if (confirm ?? false)
                 {
                     await this.todoService.Remove(item.Id);
                     this.DoLoad();

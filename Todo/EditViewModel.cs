@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using Acr.UserDialogs.Forms;
+using XF.Material.Forms.UI.Dialogs;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -15,7 +15,7 @@ namespace Todo
     public class EditViewModel : ViewModel
     {
         public EditViewModel(INavigationService navigator,
-                             IUserDialogs dialogs,
+                             IMaterialDialog dialogs,
                              IGeofenceManager geofences,
                              INotificationManager notifications,
                              ITodoService todoService)
@@ -60,7 +60,7 @@ namespace Todo
                     if (access != AccessState.Available)
                     {
                         this.RemindOnDay = false;
-                        await dialogs.Alert("Permission denied for notifications");
+                        await dialogs.AlertAsync("Permission denied for notifications");
                     }
                 });
 
@@ -73,7 +73,7 @@ namespace Todo
                     if (access != AccessState.Available)
                     {
                         this.RemindOnDay = false;
-                        await dialogs.Alert("Permission denied for geofences");
+                        await dialogs.AlertAsync("Permission denied for geofences");
                     }
                 });
 

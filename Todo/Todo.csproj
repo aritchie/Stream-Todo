@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Acr.UserDialogs.Forms" Version="1.0.0.7-beta" />
         <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1367" />
         <PackageReference Include="Shiny.Logging.AppCenter" Version="1.0.0.400-beta" />
         <PackageReference Include="Xamarin.Forms" Version="4.2.0.778463" />
@@ -20,6 +19,7 @@
         <PackageReference Include="Shiny.Notifications" Version="1.0.0.400-beta" />
         <PackageReference Include="Shiny.Locations" Version="1.0.0.400-beta" />
         <PackageReference Include="Xamarin.Forms.Maps" Version="4.2.0.778463" />
+        <PackageReference Include="XF.Material" Version="1.4.1.3" />
     </ItemGroup>
 
     <ItemGroup>
