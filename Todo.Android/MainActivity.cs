@@ -1,4 +1,5 @@
 ﻿using System;
+using AiForms.Renderers.Droid;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -29,7 +30,7 @@ namespace Todo.Droid
             base.OnCreate(savedInstanceState);
             Forms.Init(this, savedInstanceState);
             FormsMaps.Init(this, savedInstanceState);
-            AiForms.Renderers.Droid.SettingsViewInit.Init();
+            SettingsViewInit.Init();
             Material.Init(this, savedInstanceState);
 
             this.LoadApplication(new App());
