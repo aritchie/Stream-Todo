@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using XF.Material.Forms.UI.Dialogs;
 using Shiny.Locations;
 using Shiny.Notifications;
 
@@ -13,18 +12,15 @@ namespace Todo.Infrastructure
         readonly IDataService dataService;
         readonly INotificationManager notificationManager;
         readonly IGeofenceManager geofenceManager;
-        readonly IMaterialDialog dialogs;
 
 
         public TodoService(IDataService dataService,
                            INotificationManager notificationManager,
-                           IGeofenceManager geofenceManager,
-                           IMaterialDialog dialogs)
+                           IGeofenceManager geofenceManager)
         {
             this.dataService = dataService;
             this.notificationManager = notificationManager;
             this.geofenceManager = geofenceManager;
-            this.dialogs = dialogs;
         }
 
 
@@ -43,7 +39,7 @@ namespace Todo.Infrastructure
 
         public Task Save(TodoItem todo)
         {
-            if (todo.Id == default(Guid))
+            if (todo.Id == default)
                 return this.Create(todo);
 
             return this.Update(todo);
