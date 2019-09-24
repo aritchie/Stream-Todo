@@ -8,19 +8,24 @@
              mc:Ignorable="d"
              x:Class="Todo.LocationPage"
              Title="Location">
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-        
+
             <maps:Map x:Name="myMap"
-                      IsShowingUser="true"
+                      IsShowingUser="True"
+                      HasZoomEnabled="True"
+                      HasScrollEnabled="True"
                       MapType="Street"
                       MapClicked="OnMapClicked"
-                      Grid.Row="0" /> 
-    <!--        <ai:SettingsView>
+                      Grid.Row="0" />
+
+            <ai:SettingsView Grid.Row="1">
                 <ai:Section>
                     <ai:EntryCell Placeholder="Latitude"
                                   TextAlignment="Start"
@@ -31,16 +36,19 @@
                                   TextAlignment="Start"
                                   Keyboard="Numeric"
                                   ValueText="{Binding Longitude}" />
+
+                    <ai:LabelCell ValueText="{Binding Location}" />
                 </ai:Section>
 
                 <ai:Section>
                     <ai:CommandCell Title="Save Location"
                                     Command="{Binding PickLocation}" />
                 </ai:Section>
-            </ai:SettingsView>-->
+            </ai:SettingsView>
+
             <Button Text="Save Location"
                     Command="{Binding PickLocation}"
-                    Grid.Row="1" />
+                    Grid.Row="2" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

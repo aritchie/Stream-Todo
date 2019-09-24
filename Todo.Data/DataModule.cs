@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using Shiny;
-using Shiny.Jobs;
 
 
 namespace Todo.Data
@@ -13,6 +12,7 @@ namespace Todo.Data
         {
             services.AddSingleton(_ => RestService.For<IApiClient>(Constants.BaseApiUri));
             services.AddSingleton<TodoSqliteConnection>();
+            services.AddSingleton<IGeocoder, GeocoderImpl>();
             services.AddSingleton<IDataService, SqliteDataService>();
 
             //services.RegisterJob(new JobInfo
